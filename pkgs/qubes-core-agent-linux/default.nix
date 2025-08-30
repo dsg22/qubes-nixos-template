@@ -76,7 +76,7 @@
     ];
 in
   resholve.mkDerivation rec {
-    version = "4.3.5";
+    version = "4.3.29";
     pname = "qubes-core-agent-linux";
 
     #PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
@@ -85,7 +85,7 @@ in
       owner = "QubesOS";
       repo = "qubes-core-agent-linux";
       rev = "v${version}";
-      hash = "sha256-ff+L1t6TYCD9S6iyCebZlIuYP0oHnUcQiSdOJ1YHSQw=";
+      hash = "sha256-Z5zkthhwsk/UCezSeqxY3rxISy3Qko/RCKOz6jHGk0c=";
     };
 
     nativeBuildInputs =
@@ -376,6 +376,8 @@ in
         keep = {
           source = ["$file_name"];
           "$rc" = true;
+          "$mount_home" = true;
+          "$mount_usr_local" = true;
           "/rw/config/qubes_ip_change_hook" = enableNetworking;
           "/rw/config/qubes-ip-change-hook" = enableNetworking;
           "/run/wrappers/bin/qfile-unpacker" = true;

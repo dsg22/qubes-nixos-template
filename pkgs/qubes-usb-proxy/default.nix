@@ -14,13 +14,13 @@
 }:
 resholve.mkDerivation rec {
   pname = "qubes-usb-proxy";
-  version = "1.3.2";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "QubesOS";
     repo = "qubes-app-linux-usb-proxy";
     rev = "v${version}";
-    hash = "sha256-VyHDFKO0jaCeOkLWubfXOBw+PVHvPwq6iNqSYmFWOR0=";
+    hash = "sha256-AhyPpRfF6x2XS0V8+Wc+NQDZSdtv7VvMkKuRJ7iYIB4=";
   };
 
   buildInputs = [

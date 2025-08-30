@@ -9,9 +9,12 @@
   bash,
   gnugrep,
   coreutils,
+  pciutils,
   libtool,
   libXt,
   lsb-release,
+  libunistring,
+  gawk,
   git,
   gnused,
   libgbm,
@@ -36,14 +39,14 @@
   zenity,
 }:
 resholve.mkDerivation rec {
-  version = "4.2.17";
+  version = "4.3.10";
   pname = "qubes-gui-agent-linux";
 
   src = fetchFromGitHub {
     owner = "QubesOS";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dELBBU0sRtp62QwrZKvV9SJQysMG5Eo1oQMaQy3lXUg=";
+    hash = "sha256-OdVW4IToFfil4IvQp3Ef6YBDRiSlyy7+/aE7t1extz8=";
   };
 
   nativeBuildInputs =
@@ -83,6 +86,7 @@ resholve.mkDerivation rec {
       pam
       zenity
       python3Packages.xcffib
+      libunistring
       systemd
       xfce.xfconf
       # xdg-user-dirs-update
@@ -197,10 +201,13 @@ resholve.mkDerivation rec {
         "${qubes-core-agent-linux}/lib/qubes/init/functions"
         bash
         coreutils
+        gawk
         gnused
+        gnugrep
         qubes-core-qubesdb
         systemd
         util-linux
+        pciutils
         which
         xfce.xfce4-settings
         xfce.xfconf

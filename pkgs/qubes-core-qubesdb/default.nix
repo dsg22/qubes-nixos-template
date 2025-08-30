@@ -15,13 +15,13 @@
 in
   stdenv.mkDerivation rec {
     pname = "qubes-core-qubesdb";
-    version = "4.2.6";
+    version = "4.3.1";
 
     src = fetchFromGitHub {
       owner = "QubesOS";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-vPv74tBD7elYNqpgKLFKAanMH8D18OdDj0xhmw8aWwM=";
+      hash = "sha256-y350lhlA3uARWEIRTMoxoF4OrIVaP/ziuVbCAng4Igk=";
     };
 
     nativeBuildInputs = [

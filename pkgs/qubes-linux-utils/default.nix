@@ -15,7 +15,7 @@
   qubes-core-qubesdb,
   xen,
 }: let
-  version = "4.3.3";
+  version = "4.3.11";
   name = "qubes-linux-utils";
   resholved = resholve.mkDerivation rec {
     inherit version;
@@ -25,7 +25,7 @@
       owner = "QubesOS";
       repo = name;
       rev = "v${version}";
-      hash = "sha256-XHx1wt2whMQC+TUc2U97KCOJ8memT6cH0BAp2zxYQyQ=";
+      hash = "sha256-5nMBsIPxeCvGP7I0JACTBLjEq+kvGVoa3mokeBrSOCU=";
     };
 
     nativeBuildInputs =
