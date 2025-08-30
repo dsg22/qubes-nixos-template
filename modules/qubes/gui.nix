@@ -70,6 +70,10 @@ in
         requires = ["qubes-db.service"];
         # ensure the service is started on boot, since Install is ignored
         wantedBy = ["multi-user.target"];
+        # Restarting guid means losing all windows, and not being able to start new
+        # programs. The connection is not re-established. Better to require a reboot
+        # than to leave the user without access to the running VM.
+        restartIfChanged = false;
         serviceConfig = {
           ExecStartPre = ["" "${pkgs.bash}/bin/sh -c ${pkgs.qubes-gui-agent-linux}/lib/qubes/qubes-gui-agent-pre.sh"];
           ExecStart = ["" "${qubes-gui}/bin/qubes-gui $GUI_OPTS"];

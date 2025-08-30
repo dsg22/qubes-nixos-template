@@ -43,6 +43,10 @@ in
         requires = ["qubes-db.service"];
         wantedBy = ["multi-user.target"];
         after = ["systemd-modules-load.service" "xendriverdomain.service" "systemd-user-sessions.service"];
+        # Restarting qrexec means losing management access. The connection is not
+        # re-established. Better to require a reboot than to leave the user without
+        # access to the running VM.
+        restartIfChanged = false;
         environment = {
           QREXEC_SERVICE_PATH = concatStringsSep ":" qrexec_services;
           QREXEC_MULTIPLEXER_PATH = "${pkgs.qubes-core-qrexec}/lib/qubes/qubes-rpc-multiplexer";
