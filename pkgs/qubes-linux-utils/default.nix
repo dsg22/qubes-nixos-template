@@ -67,6 +67,7 @@
           LIBDIR=/lib \
           SYSLIBDIR=/lib \
           SBINDIR=/bin \
+          BINDIR=/bin \
           SCRIPTSDIR=/lib/qubes \
           INCLUDEDIR=/include
 
