@@ -12,16 +12,19 @@
   systemd,
 }: let
   qubesdb-cmds = "qubesdb-read qubesdb-write qubesdb-rm qubesdb-multiread qubesdb-list qubesdb-watch";
+
+  packageInfo = import ./package_info.nix;
+
 in
   stdenv.mkDerivation rec {
     pname = "qubes-core-qubesdb";
-    version = "4.3.1";
+    version = packageInfo.version;
 
     src = fetchFromGitHub {
       owner = "QubesOS";
       repo = pname;
-      rev = "v${version}";
-      hash = "sha256-y350lhlA3uARWEIRTMoxoF4OrIVaP/ziuVbCAng4Igk=";
+      rev = "v${packageInfo.version}";
+      hash = packageInfo.hash;
     };
 
     nativeBuildInputs = [

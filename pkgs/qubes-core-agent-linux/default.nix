@@ -34,6 +34,8 @@
   psmisc,
   python3,
   python3Packages,
+  python-qubesdb,
+  python-qubesagent,
   qubes-core-qrexec,
   qubes-core-qubesdb,
   qubes-core-vchan-xen,
@@ -74,9 +76,18 @@
       "lib/qubes/resize-rootfs"
       "lib/qubes/update-proxy-configs"
     ];
+  pythonWithQubesLibs = python3.withPackages (
+    python-pkgs: with python-pkgs; [
+      python-qubesdb
+      python-qubesagent
+      pygobject3
+      pyxdg
+    ]
+  );
+  packageInfo = import ./package_info.nix;
 in
   resholve.mkDerivation rec {
-    version = "4.3.29";
+    version = packageInfo.version;
     pname = "qubes-core-agent-linux";
 
     #PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
@@ -84,8 +95,8 @@ in
     src = fetchFromGitHub {
       owner = "QubesOS";
       repo = "qubes-core-agent-linux";
-      rev = "v${version}";
-      hash = "sha256-Z5zkthhwsk/UCezSeqxY3rxISy3Qko/RCKOz6jHGk0c=";
+      rev = "v${packageInfo.version}";
+      hash = packageInfo.hash;
     };
 
     nativeBuildInputs =
@@ -219,6 +230,9 @@ in
 
         # use suid wrapper we will create in the module
         substituteInPlace "$out/etc/qubes-rpc/qubes.Filecopy" --replace "/usr/lib/qubes/qfile-unpacker" "/run/wrappers/bin/qfile-unpacker"
+
+        substituteInPlace "$out/etc/qubes-rpc/qubes.StartApp" \
+          --replace "#!/usr/bin/python3" "#!${pythonWithQubesLibs}/bin/python3"
 
         for path in ${lib.concatStringsSep " " scripts_using_functions}; do
           substituteInPlace "$out/$path" --replace '/usr/lib/qubes/init/functions' "functions"
@@ -410,6 +424,7 @@ in
 
     postFixup = ''
       wrapPythonPrograms
+      wrapPythonProgramsIn "$out/etc/qubes-rpc/"
     '';
 
     meta = with lib; {

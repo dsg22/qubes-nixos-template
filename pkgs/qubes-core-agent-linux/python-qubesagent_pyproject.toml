@@ -1,0 +1,17 @@
+[build-system]
+requires = ["PyGObject >= 3.46.0", "pyxdg >= 0.27"]
+
+[project]
+name = "qubesagent"
+version = "_REPLACEME_VERSION"
+description = "Miscellaneous functionality used in Qubes VM guests"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: Linux",
+]
+license = "GPL-2.0-or-later"
+
+[project.urls]
+Homepage = "https://github.com/QubesOS/qubes-core-agent-linux/"
+

@@ -13,6 +13,8 @@
     lib = nixpkgs.lib;
     system = "x86_64-linux";
     qubesPackages = final: prev: {
+      python-qubesdb = prev.callPackage ./pkgs/qubes-core-qubesdb/python-qubesdb.nix { inherit (pkgs) python3Packages; };
+      python-qubesagent = prev.callPackage ./pkgs/qubes-core-agent-linux/python-qubesagent.nix { inherit (pkgs) python3Packages; };
       qubes-core-qubesdb = prev.callPackage ./pkgs/qubes-core-qubesdb {};
       qubes-core-vchan-xen = prev.callPackage ./pkgs/qubes-core-vchan-xen {};
       qubes-core-qrexec = prev.callPackage ./pkgs/qubes-core-qrexec {};
