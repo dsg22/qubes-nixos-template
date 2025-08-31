@@ -47,6 +47,7 @@ in
         # re-established. Better to require a reboot than to leave the user without
         # access to the running VM.
         restartIfChanged = false;
+        stopIfChanged = false;
         environment = {
           QREXEC_SERVICE_PATH = concatStringsSep ":" qrexec_services;
           QREXEC_MULTIPLEXER_PATH = "${pkgs.qubes-core-qrexec}/lib/qubes/qubes-rpc-multiplexer";

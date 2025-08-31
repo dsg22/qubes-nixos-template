@@ -74,6 +74,7 @@ in
         # programs. The connection is not re-established. Better to require a reboot
         # than to leave the user without access to the running VM.
         restartIfChanged = false;
+        stopIfChanged = false;
         serviceConfig = {
           ExecStartPre = ["" "${pkgs.bash}/bin/sh -c ${pkgs.qubes-gui-agent-linux}/lib/qubes/qubes-gui-agent-pre.sh"];
           ExecStart = ["" "${qubes-gui}/bin/qubes-gui $GUI_OPTS"];
