@@ -25,6 +25,12 @@ qvm-run nixos xterm
 
 at this point you can customize the template and use it like any other NixOS install. the example config has been copied to `/etc/nixos`.
 
+## Configuration without flakes
+
+The default configuration comes as a flake. If you prefer a traditional setup, you can delete
+`/etc/nixos/flake.*`, clone this repo and add `<path-to-repo>/default.nix` to the `imports` section
+of your `configuration.nix`.
+
 ## alternative install via iso
 
 for those that want to avoid installing anything in dom0, these instructions will allow you to install to
