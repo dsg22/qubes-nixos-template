@@ -128,7 +128,9 @@ resholve.mkDerivation rec {
 
     # this will point to the unresholved package but it is not an
     # issue since our wrapper only refers to external resources
-    substituteInPlace "$out/etc/xdg/autostart/qubes-qrexec-fork-server.desktop" --replace '/usr/bin/qrexec-fork-server' "$out/bin/qrexec-fork-server"
+    # Run through shell to get the user environment, as this services environment will
+    # be inherited by programs the user runs through the menu.
+    substituteInPlace "$out/etc/xdg/autostart/qubes-qrexec-fork-server.desktop" --replace '/usr/bin/qrexec-fork-server' "${bash}/bin/sh --login -c \"exec $out/bin/qrexec-fork-server\""
 
     # these are nested within runuser calls, easier to just substituteInPlace
     # and pretend to resholve that runuser is not executing it's args
