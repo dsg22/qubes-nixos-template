@@ -86,7 +86,7 @@
     };
     rpm = pkgs.callPackage ./tools/rpm.nix {
       inherit nixpkgs;
-      qubesVersion = "4.2.0";
+      qubesVersion = "4.3.0";
       nixosConfig = nixosConfigurations.nixos;
     };
     iso = nixosConfigurations.iso.config.system.build.isoImage;
