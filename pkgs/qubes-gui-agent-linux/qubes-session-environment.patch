@@ -1,0 +1,15 @@
+diff --git a/appvm-scripts/usrbin/qubes-session b/appvm-scripts/usrbin/qubes-session
+index 4417ba7..5012aae 100755
+--- a/appvm-scripts/usrbin/qubes-session
++++ b/appvm-scripts/usrbin/qubes-session
+@@ -66,7 +66,9 @@ UPDTYPE=$(/usr/bin/qubesdb-read /qubes-vm-updateable)
+ 
+ # process /etc/xdg/autostart and friends (according to Desktop Application
+ # Autostart Specification)
+-/usr/bin/qubes-session-autostart QUBES X-QUBES "X-$VMTYPE" "X-$UPDTYPE"
++systemctl --user set-environment XDG_CURRENT_DESKTOP="QUBES:X-QUBES:X-$VMTYPE:X-$UPDTYPE"
++systemctl --user import-environment DESKTOP_SESSION DISPLAY XDG_SEAT XDG_SESSION_CLASS XDG_SESSION_DESKTOP XDG_SESSION_ID XDG_SESSION_TYPE XDG_VTNR
++systemctl --user start xdg-desktop-autostart-no-really-i-mean-it.target
+ 
+ if [ -f /etc/X11/xinit/xinitrc.d/qubes-keymap.sh ]; then
+     . /etc/X11/xinit/xinitrc.d/qubes-keymap.sh

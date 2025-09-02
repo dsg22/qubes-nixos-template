@@ -50,8 +50,19 @@ in
 
       xdg.autostart.enable = true;
       systemd.user.targets.nixos-fake-graphical-session = {
-        requires = ["xdg-desktop-autostart.target" "graphical-session.target"];
-        before = ["xdg-desktop-autostart.target" "graphical-session.target"];
+        requires = ["graphical-session.target"];
+        before = ["graphical-session.target"];
+      };
+
+      # Ugly hack. Qubes uses .desktop files with xdgautostart and OnlyShowIn= as a poor mans
+      # "service manager". We're using systemd's xdg-desktop-autostart to generate systemd services
+      # from these files. But we need XDG_CURRENT_DESKTOP to be set so the start condition succeeds
+      # before starting xdg-desktop-autostart.target. That happens in qubes-session, and there isn't
+      # really any service we can use to order this correctly. So we patch qubes-session to use
+      # `systemctl start` after the vars are set. But systemd bans manually starting
+      # xdg-desktop-autostart.target. So we start this instead, and have it require the real target.
+      systemd.user.targets.xdg-desktop-autostart-no-really-i-mean-it = {
+        requires = ["xdg-desktop-autostart.target"];
       };
       # adding to system packages will cause their xdg autostart files to be picked up
       environment.systemPackages = [

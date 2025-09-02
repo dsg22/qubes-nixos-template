@@ -49,6 +49,10 @@ resholve.mkDerivation rec {
     hash = "sha256-OdVW4IToFfil4IvQp3Ef6YBDRiSlyy7+/aE7t1extz8=";
   };
 
+  patches = [
+    ./qubes-session-environment.patch
+  ];
+
   nativeBuildInputs =
     [
       autoPatchelfHook
@@ -148,10 +152,6 @@ resholve.mkDerivation rec {
     # we can just substitute with true
     # FIXME this wasn't actually replaced properly before...
     # substituteInPlace "$out/usr/bin/qubes-run-xorg" --replace 'if [ -x /bin/loginctl ]; then' 'if [ true ]; then'
-
-    # replace xdg autostart since we generate systemd units instead
-    # FIXME probably needs to be moved earlier in process
-    substituteInPlace "$out/usr/bin/qubes-session" --replace '/usr/bin/qubes-session-autostart QUBES X-QUBES "X-$VMTYPE" "X-$UPDTYPE"' 'systemctl --user set-environment XDG_CURRENT_DESKTOP="QUBES:X-QUBES:X-$VMTYPE:X-$UPDTYPE"'
 
     cat >> $out/etc/X11/xorg-qubes.conf.template <<EOF
     Section "Files"
