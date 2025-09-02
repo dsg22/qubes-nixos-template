@@ -22,6 +22,7 @@
       qubes-linux-utils = prev.callPackage ./pkgs/qubes-linux-utils {};
       qubes-gui-common = prev.callPackage ./pkgs/qubes-gui-common {};
       qubes-gui-agent-linux = prev.callPackage ./pkgs/qubes-gui-agent-linux {};
+      qubes-gui-agent-linux-desktop = prev.callPackage ./pkgs/qubes-gui-agent-linux/desktop.nix {};
       qubes-sshd = prev.callPackage ./pkgs/qubes-sshd {};
       qubes-usb-proxy = prev.callPackage ./pkgs/qubes-usb-proxy {};
       qubes-gpg-split = prev.callPackage ./pkgs/qubes-gpg-split {};
