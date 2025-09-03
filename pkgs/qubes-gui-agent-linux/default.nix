@@ -23,6 +23,7 @@
   pipewire,
   pixman,
   pkg-config,
+  python3,
   python3Packages,
   pulseaudio,
   qubes-core-qrexec,
@@ -40,6 +41,11 @@
 }:
 let
   packageInfo = import ./package_info.nix;
+  pythonWithXcffib = python3.withPackages (
+    python-pkgs: with python-pkgs; [
+      xcffib
+    ]
+  );
 in
   qubes-template-resholve.mkDerivation rec {
     version = packageInfo.version;
@@ -96,6 +102,7 @@ in
         libunistring
         systemd
         xfce.xfconf
+        pythonWithXcffib
         # xdg-user-dirs-update
       ]
       ++ (with xorg; [
@@ -146,6 +153,9 @@ in
       substituteInPlace "$out/usr/bin/qubes-run-xorg" --replace ' /etc/X11/xorg-qubes.conf' ' /var/run/xorg-qubes.conf'
       substituteInPlace "$out/usr/bin/qubes-run-xorg" --replace '-config xorg-qubes.conf' '-config /var/run/xorg-qubes.conf'
 
+      substituteInPlace "$out/usr/lib/qubes/icon-sender" --replace-fail \
+        '#!/usr/bin/python3' "#!${pythonWithXcffib}/bin/python"
+
       # resholve won't replace the absolute path reference in this conditional,
       # we can just substitute with true
       # FIXME this wasn't actually replaced properly before...
@@ -173,12 +183,13 @@ in
       # be inherited by programs the user runs through the menu.
       substituteInPlace "$out/etc/xdg/autostart/qubes-qrexec-fork-server.desktop" --replace-fail \
         '/usr/bin/qrexec-fork-server' "${bash}/bin/sh --login -c \"exec $out/bin/qrexec-fork-server\""
+
       substituteInPlace "$out/etc/xdg/autostart/qubes-gtk4-workarounds.desktop" --replace-fail \
-        '/usr/lib/qubes/gtk4-workarounds.sh' "${bash}/bin/sh --login -c \"exec $out/lib/qubes/gtk4-workarounds.sh\""
+        '/usr/lib/qubes/gtk4-workarounds.sh' "$out/lib/qubes/gtk4-workarounds.sh"
       substituteInPlace "$out/etc/xdg/autostart/qubes-icon-sender.desktop" --replace-fail \
-        '/usr/lib/qubes/icon-sender' "${bash}/bin/sh --login -c \"exec $out/lib/qubes/icon-sender\""
+        '/usr/lib/qubes/icon-sender' "$out/lib/qubes/icon-sender-wrapped"
       substituteInPlace "$out/etc/xdg/autostart/qubes-keymap.desktop" --replace-fail \
-        '/usr/lib/qubes/qubes-keymap.sh' "${bash}/bin/sh --login -c \"exec $out/lib/qubes/qubes-keymap.sh\""
+        '/usr/lib/qubes/qubes-keymap.sh' "$out/lib/qubes/qubes-keymap.sh"
       '';
 
     solutions = {
@@ -258,6 +269,8 @@ in
         --set QREXEC_MULTIPLEXER_PATH "${qubes-core-qrexec}/lib/qubes/qubes-rpc-multiplexer" \
         --set PATH "/run/wrappers/bin:/home/user/.nix-profile/bin:/nix/profile/bin:/home/user/.local/state/nix/profile/bin:/etc/profiles/per-user/user/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
 
+      makeWrapper "$out/lib/qubes/icon-sender" "$out/lib/qubes/icon-sender-wrapped" \
+        --prefix PATH : ${lib.makeBinPath [ qubes-core-qrexec ]}
     '';
 
     meta = with lib; {

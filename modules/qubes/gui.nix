@@ -64,9 +64,12 @@ in
       systemd.user.targets.xdg-desktop-autostart-no-really-i-mean-it = {
         requires = ["xdg-desktop-autostart.target"];
       };
-      # adding to system packages will cause their xdg autostart files to be picked up
       environment.systemPackages = [
+        # adding to system packages will cause their xdg autostart files to be picked up
         pkgs.qubes-gui-agent-linux
+
+        # Add icons so dom0 menus get them
+        adwaita-icon-theme
       ];
 
       security.polkit.enable = true;

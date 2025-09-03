@@ -70,6 +70,7 @@
       "etc/qubes-rpc/qubes.Filecopy"
       "etc/qubes-rpc/qubes.VMShell"
       "etc/qubes-rpc/qubes.WaitForSession"
+      "etc/qubes-rpc/qubes.GetImageRGBA"
       "lib/qubes/init/functions"
       "lib/qubes/init/setup-rw.sh"
       "lib/qubes/init/resize-rootfs-if-needed.sh"
@@ -198,7 +199,7 @@ in
             SYSTEM_DROPIN_DIR=/usr/lib/systemd/system \
             USER_DROPIN_DIR=/usr/lib/systemd/user \
             DIST=nixos \
-            PYTHON=${python3}/bin/python3
+            PYTHON=${pythonWithQubesLibs}/bin/python3
         make -C app-menu install DESTDIR="$out" install BINDIR=/bin LIBDIR=/lib
         make -C misc install DESTDIR="$out" LIBDIR=/lib SYSLIBDIR=/lib
         make -C qubes-rpc DESTDIR="$out" BINDIR=/bin LIBDIR=/lib install
@@ -227,6 +228,11 @@ in
 
         # Fixup paths
         substituteInPlace "$out/bin/qubes-session-autostart" --replace "QUBES_XDG_CONFIG_DROPINS = '/etc/qubes/autostart'" "QUBES_XDG_CONFIG_DROPINS = \"$out/etc/qubes/autostart\""
+
+        substituteInPlace "$out/lib/qubes/xdg-icon" --replace-fail \
+          "/usr/share/icons" "/run/current-system/sw/share/icons/"
+        substituteInPlace "$out/"lib/qubes/xdg-icon \
+          --replace "#!/usr/bin/python3" "#!${pythonWithQubesLibs}/bin/python3"
 
         # use suid wrapper we will create in the module
         substituteInPlace "$out/etc/qubes-rpc/qubes.Filecopy" --replace "/usr/lib/qubes/qfile-unpacker" "/run/wrappers/bin/qfile-unpacker"
@@ -350,6 +356,7 @@ in
           "/usr/lib/qubes/qvm_nautilus_bookmark.sh" = true;
           "/usr/lib/qubes/resize-rootfs" = true;
           "/usr/lib/qubes/update-proxy-configs" = true;
+          "/usr/lib/qubes/xdg-icon" = true;
           "/lib/systemd/systemd-sysctl" = true;
           "/sbin/ip" = true;
           umount = true;
@@ -371,8 +378,10 @@ in
             getent
             gnugrep
             gnused
+            graphicsmagick
             kmod
             lvm2
+            librsvg
             mount
             nettools
             networkmanager
@@ -408,6 +417,7 @@ in
             "cannot:bin/qubes-vmexec"
             "cannot:lib/qubes/init/bind-dirs.sh"
             "cannot:lib/qubes/qfile-unpacker"
+            "cannot:lib/qubes/xdg-icon"
           ]
           ++ lib.optional enableNetworking "cannot:${iproute2}/bin/ip";
       };
