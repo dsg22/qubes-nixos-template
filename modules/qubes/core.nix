@@ -28,6 +28,10 @@ in
         services.qubes.core.package = qubes-core-agent-linux;
         services.qubes.db.enable = true;
 
+        # Resholve uses python2
+        nixpkgs.config.permittedInsecurePackages = [ "resholve-0.10.6" ];
+
+
         # TODO make the username configurable?
         users.groups = {
           qubes = {
@@ -170,6 +174,11 @@ in
           serviceConfig = {
             ExecStart = ["" "${qubes-core-agent-linux}/lib/qubes/init/mount-dirs.sh"];
           };
+        };
+
+        systemd.services.qubes-bind-dirs = {
+          # ensure the service is started on boot, since Install is ignored
+          wantedBy = ["multi-user.target"];
         };
 
         systemd.services.qubes-rootfs-resize = {

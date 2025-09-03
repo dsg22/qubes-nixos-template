@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  resholve,
+  qubes-template-resholve,
   autoPatchelfHook,
   autoconf,
   automake,
@@ -41,7 +41,7 @@
 let
   packageInfo = import ./package_info.nix;
 in
-  resholve.mkDerivation rec {
+  qubes-template-resholve.mkDerivation rec {
     version = packageInfo.version;
     pname = "qubes-gui-agent-linux";
 
@@ -138,9 +138,6 @@ in
       substituteInPlace "$out/usr/bin/qubes-run-xorg" --replace ' /bin/sh' ' ${bash}/bin/sh'
       substituteInPlace "$out/usr/bin/qubes-run-xorg" --replace '/usr/bin/xinit' '${xorg.xinit}/bin/xinit'
 
-      # Installed in desktop.nix
-      rm -rf $out/etc/xdg/autostart
-
       # skip the wrapper since it's just to determine which binary to call
       substituteInPlace "$out/usr/bin/qubes-run-xorg" --replace '/usr/lib/qubes/qubes-xorg-wrapper' "${xorg.xorgserver}/bin/Xorg"
 
@@ -170,6 +167,19 @@ in
 
       rm -rf "$out/usr"
     '';
+
+    postResholveFixup = ''
+      # Run through shell to get the user environment, as this services environment will
+      # be inherited by programs the user runs through the menu.
+      substituteInPlace "$out/etc/xdg/autostart/qubes-qrexec-fork-server.desktop" --replace-fail \
+        '/usr/bin/qrexec-fork-server' "${bash}/bin/sh --login -c \"exec $out/bin/qrexec-fork-server\""
+      substituteInPlace "$out/etc/xdg/autostart/qubes-gtk4-workarounds.desktop" --replace-fail \
+        '/usr/lib/qubes/gtk4-workarounds.sh' "${bash}/bin/sh --login -c \"exec $out/lib/qubes/gtk4-workarounds.sh\""
+      substituteInPlace "$out/etc/xdg/autostart/qubes-icon-sender.desktop" --replace-fail \
+        '/usr/lib/qubes/icon-sender' "${bash}/bin/sh --login -c \"exec $out/lib/qubes/icon-sender\""
+      substituteInPlace "$out/etc/xdg/autostart/qubes-keymap.desktop" --replace-fail \
+        '/usr/lib/qubes/qubes-keymap.sh' "${bash}/bin/sh --login -c \"exec $out/lib/qubes/qubes-keymap.sh\""
+      '';
 
     solutions = {
       default = {

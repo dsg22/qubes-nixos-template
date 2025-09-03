@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   lib,
-  resholve,
+  qubes-template-resholve,
   wrapGAppsNoGuiHook,
   stdenv,
   bash,
@@ -86,7 +86,7 @@
   );
   packageInfo = import ./package_info.nix;
 in
-  resholve.mkDerivation rec {
+  qubes-template-resholve.mkDerivation rec {
     version = packageInfo.version;
     pname = "qubes-core-agent-linux";
 
@@ -425,6 +425,11 @@ in
     postFixup = ''
       wrapPythonPrograms
       wrapPythonProgramsIn "$out/etc/qubes-rpc/"
+    '';
+
+    postResholveFixup = ''
+      substituteInPlace "$out/lib/systemd/system/qubes-bind-dirs.service" --replace-fail \
+        "/usr/lib/qubes/init/" "$out/lib/qubes/init/"
     '';
 
     meta = with lib; {

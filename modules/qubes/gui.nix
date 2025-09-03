@@ -67,7 +67,6 @@ in
       # adding to system packages will cause their xdg autostart files to be picked up
       environment.systemPackages = [
         pkgs.qubes-gui-agent-linux
-        pkgs.qubes-gui-agent-linux-desktop
       ];
 
       security.polkit.enable = true;
