@@ -79,7 +79,7 @@ Host github.com
 ## notes
 
 ### what works
-- qrexec eventually works
+- qrexec
 - appvm networking
 - xorg
 - copy / paste
@@ -96,7 +96,6 @@ Host github.com
 - audio
 
 ### what doesn't work / untested
-- qrexec startup isn't clean, commands can fail initially
 - using a non-xen provided kernel
 - using as netvm or usbvm
 - Using as Disposable VM
