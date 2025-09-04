@@ -130,11 +130,13 @@ in
     # FIXME sub xdg autostart paths
     # FIXME nixgl
     installPhase = ''
-      make install-rh-agent \
+      make install-rh-agent install-pipewire \
           DESTDIR="$out" \
           LIBDIR=/lib \
           USRLIBDIR=/lib \
-          SYSLIBDIR=/lib
+          SYSLIBDIR=/lib \
+          USERUNITDIR=/share/systemd \
+          PIPEWIRE_MODULES=/lib/pipewire-0.3
 
       # overwrite the broken symlink created by make install-rh-agent
       ln -sf ../../bin/qubes-set-monitor-layout $out/etc/qubes-rpc/qubes.SetMonitorLayout
@@ -170,8 +172,10 @@ in
       EndSection
       EOF
 
+      mkdir -p "$out/share"
+      mv $out/usr/share/* "$out/share"
+      rm -rf "$out/usr/share"
       mv "$out/usr/bin" "$out/bin"
-      mv "$out/usr/share" "$out/share"
       mv "$out/usr/lib/qubes" "$out/lib/qubes"
       mv "$out/usr/lib/sysctl.d" "$out/lib/sysctl.d"
 

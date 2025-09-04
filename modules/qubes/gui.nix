@@ -23,6 +23,11 @@ in
       services.qubes.db.enable = true;
       services.qubes.qrexec.enable = true;
 
+      services.pipewire.enable = lib.mkDefault true;
+      services.pipewire.configPackages = [ pkgs.qubes-gui-agent-linux ];
+
+      systemd.user.services.pipewire.environment.PIPEWIRE_MODULE_DIR = "${pkgs.qubes-gui-agent-linux}/lib/pipewire-0.3:${pkgs.pipewire}/lib/pipewire-0.3";
+
       services.udev.packages = [
         pkgs.qubes-linux-utils
         pkgs.qubes-gui-agent-linux
