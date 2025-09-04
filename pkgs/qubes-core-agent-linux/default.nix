@@ -68,6 +68,7 @@
     scripts_using_functions
     ++ [
       "etc/qubes-rpc/qubes.Filecopy"
+      "etc/qubes-rpc/qubes.SetDateTime"
       "etc/qubes-rpc/qubes.VMShell"
       "etc/qubes-rpc/qubes.WaitForSession"
       "etc/qubes-rpc/qubes.GetImageRGBA"

@@ -28,6 +28,8 @@ in
         services.qubes.core.package = qubes-core-agent-linux;
         services.qubes.db.enable = true;
 
+        services.timesyncd.enable = lib.mkOverride 900 false;
+
         # Resholve uses python2
         nixpkgs.config.permittedInsecurePackages = [ "resholve-0.10.6" ];
 
