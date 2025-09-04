@@ -91,14 +91,15 @@ Host github.com
 - usb proxy
 - building an rpm for the templatevm
 - update proxy
+- populating application shortcuts
+- time sync via rpc
+- audio
 
 ### what doesn't work / untested
 - qrexec startup isn't clean, commands can fail initially
-- populating application shortcuts
 - using a non-xen provided kernel
 - using as netvm or usbvm
-- time sync via rpc ( currently handled is systemd-timesyncd, but per vm ntp sync creates more attack surface area? )
-- audio
+- Using as Disposable VM
 - grow root fs
 
 ### bugs
@@ -106,4 +107,4 @@ Host github.com
 
 ### todo
 - deal with substituteInPlace deprecation
-- should be using 4.2.x package versions across the board, there's a couple 4.3.x packages atm
+
