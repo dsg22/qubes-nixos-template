@@ -69,7 +69,7 @@ in
         pkgs.qubes-gui-agent-linux
 
         # Add icons so dom0 menus get them
-        adwaita-icon-theme
+        pkgs.adwaita-icon-theme
       ];
 
       security.polkit.enable = true;
